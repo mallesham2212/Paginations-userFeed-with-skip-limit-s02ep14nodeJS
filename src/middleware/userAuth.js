@@ -2,12 +2,14 @@ const jwt=require("jsonwebtoken");
 const User = require("../models/user");
 
 const userAuth =  async (req, res ,next)  =>{
-
     // Checking The token exist or not in every API request 
    try
    { 
     const {token}= req.cookies;
-    const decodedMessage= await jwt.verify(token,"Mallesham@2212");
+    if(!token){
+        return res.status(401).send("please Login")
+    }
+    const decodedMessage=await jwt.verify(token,"Mallesham@2212");
     if(!decodedMessage){
         throw new Error("Invalid Token");
     }

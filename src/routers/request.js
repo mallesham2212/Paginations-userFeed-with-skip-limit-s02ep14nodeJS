@@ -3,8 +3,6 @@ const profileRouter = express.Router();
 const { userAuth } = require('../middleware/userAuth');
 const { ConnectionRequestModel } = require("../models/connectionRequest");
 const user = require("../models/user");
-
-
 profileRouter.post("/request/send/:status/:userId", userAuth, async (req, res) => {
 	try {
 		const status = req.params.status;
@@ -57,10 +55,6 @@ profileRouter.post("/request/review/:status/:requestId", userAuth, async (req, r
 
 
 	try {
-
-
-
-
 		const loggedInUser = req.user;
 		const { status, requestId } = req.params;
 

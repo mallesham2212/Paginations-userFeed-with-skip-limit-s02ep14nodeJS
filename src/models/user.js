@@ -15,8 +15,7 @@ const userSchema = new mongoose.Schema({
         required:true,
         trim: true,
     },
-    age:{
-      
+    age:{    
         type:Number,
         min:18
     },
@@ -40,6 +39,14 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
+    about: {
+        type: String,
+        validate(val){
+            if(val.length>=95){
+                throw new Error("about exceeding");
+            }
+        }  
+      },
     gender:{
         type:String,
         validate(val){
@@ -48,8 +55,9 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
-    photourl:{
+    photoUrl:{
         type:String,   
+        default: "https://geographyandyou.com/images/user-profile.png",
         validate(val){
             if(!validator.isURL(val)){
                 throw new Error("url path is correct");  
@@ -58,16 +66,11 @@ const userSchema = new mongoose.Schema({
     },
     skills:{
         type:[String],
-        validate(val){
-            if(val.length >10){
-                throw new Error("skill cant exceed 10");
-            }
-        }
+        required:true,
+        trim: true,
+        
     }
 },{timestamps:true});
-
-
-
 
 userSchema.methods.getJWT =async function(){
     const user = this;
@@ -87,7 +90,5 @@ userSchema.methods.validatePassword = async function (passwordInputByUser) {
     return isUserExist;
 
 }
-
-
 // Create the User model
 module.exports =mongoose.model("User ", userSchema);

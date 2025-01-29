@@ -17,26 +17,19 @@ profileRouter.get("/profile/view",userAuth, async (req, res) => {
 })
 
 profileRouter.patch("/profile/edit",userAuth , async (req,res) =>{
-    
-
 	try {
 		if(!validateEditData(req)){
-			throw new Error("Invalid edit data");
+			return
 		}
 		const loggedInUser=req.user;
 		const editUser =req.body;
-
-		console.log(loggedInUser);
-		
 		Object.keys(editUser ).forEach(key => {
 			// Update loggedInUser  properties with values from editUser 
 				loggedInUser [key] = editUser [key];
 		});
 
-		console.log(loggedInUser);
-		
-
 		await loggedInUser.save();
+		res.json({data:loggedInUser})
 	} catch (error) {
 		res.status(400).send("ERROR  :"+ error.message );
 	}

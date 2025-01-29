@@ -1,29 +1,26 @@
+const cors = require('cors')
 const express = require('express')
 const connectDb = require('./config/database')
-
 const cookieParser = require('cookie-parser');
 const jwt = require("jsonwebtoken");
 const user = require('./models/user');
 const { userAuth } = require('./middleware/userAuth');
-
-
-
-const authRouter =require("../src/routers/authRouter");
-const profileRouter =require("../src/routers/profile")
-const requestRouter =require("../src/routers/request");
+const authRouter = require("../src/routers/authRouter");
+const profileRouter = require("../src/routers/profile")
+const requestRouter = require("../src/routers/request");
 const { userRouter } = require('./routers/userNeeds');
-
 const app = express()
-
+app.use(cors({
+	origin: "http://localhost:5173",
+	credentials: true
+}
+))
 app.use(express.json());
 app.use(cookieParser());
-
-
-
-app.use("/" , authRouter)
-app.use("/" , profileRouter)
-app.use("/" , requestRouter)
-app.use("/" , userRouter)
+app.use("/", authRouter)
+app.use("/", profileRouter)
+app.use("/", requestRouter)
+app.use("/", userRouter)
 
 
 
@@ -31,9 +28,9 @@ app.use("/" , userRouter)
 // This is how we can get the data from database with specify email get request
 
 //This is how we can update in the database 
-app.get("/feed", async (req,res)=>{
+app.get("/feed", async (req, res) => {
 	try {
-		const users=await User.find({}); 
+		const users = await User.find({});
 		res.send(users)
 	} catch (error) {
 		res.send("no data available")
@@ -57,7 +54,7 @@ app.get("/feed", async (req,res)=>{
 
 
 // This is how we can delete the required user from database
-app.delete("/user", async (req, res) => {
+app.delete("/user/delete", async (req, res) => {
 	try {
 		const { Email, passWord } = req.body;
 		const isEmailExist = await User.findOne({ Email: Email });
